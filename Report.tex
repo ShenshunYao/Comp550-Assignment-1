@@ -1,0 +1,64 @@
+%
+% File acl2015.tex
+%
+% Contact: car@ir.hit.edu.cn, gdzhou@suda.edu.cn
+%%
+%% Based on the style files for ACL-2014, which were, in turn,
+%% Based on the style files for ACL-2013, which were, in turn,
+%% Based on the style files for ACL-2012, which were, in turn,
+%% based on the style files for ACL-2011, which were, in turn, 
+%% based on the style files for ACL-2010, which were, in turn, 
+%% based on the style files for ACL-IJCNLP-2009, which were, in turn,
+%% based on the style files for EACL-2009 and IJCNLP-2008...
+
+%% Based on the style files for EACL 2006 by 
+%%e.agirre@ehu.es or Sergi.Balari@uab.es
+%% and that of ACL 08 by Joakim Nivre and Noah Smith
+
+\documentclass[10pt]{article}
+\usepackage{acl2015}
+\usepackage{times}
+\usepackage{url}
+\usepackage{latexsym}
+\usepackage{mathpazo}
+%\setlength\titlebox{5cm}
+
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+
+\title{Comp 550 Programming Assignment 1 Report \\ Sentiment Analysis}
+\author{Shenshun Yao \\
+  McGill University \\
+  {\tt shenshun.yao@mcgill.ca} \\}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+\section{Problem Setup}
+  In this assignment, our task is to train models that classify a sentence into either a positive or negative sentiment. These classifiers will distinguish the given corpus which is a collection of movie review sentences that have already separated into positive and negative polarity. These sentences come from a movie review dataset constructed by the authors of \cite{pang-lee-2005-seeing}.
+\section{Experimental Procedures}
+First, we implemented the basic data preprocessor: making sure all the words are lowercase and remove the punctuation marks and the stopwords. Then, we extracted infrequently occurring words as features and features should be unigram counts, this step can be done by using scikit-learn’s feature extraction module {\tt TfidfVectorizer} as well as ignoring terms that have a document frequency strictly higher than $0.1$. Also, we experimented with whether to \textbf{lemmatize}(remove affixes and recover lemma) or \textbf{stem}(cut affixes off), and whether to \textbf{include stopwords}. Last, we ran
+\begin{enumerate}
+    \item Logistic Regression
+    \item Support Vector Machine(with a linear kernel) 
+    \item Naive Bayes Algorithms
+\end{enumerate} each tuned for the preprocessing and feature extract decisions described above.
+
+We implemented Google's BERT\cite{devlin2019bert} as the fourth model, which is described as the beginning of a new era in NLP. BERT is designed to pretrain deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. The pre-trained BERT model can be fine-tuned with an additional output layer to create state-of-the-art models for a wide range of NLP tasks.
+\section{Hyper-parameter Settings}
+For the Logistic Regression and SVM modules in scikit-learn, an $L^2$ regularization is applied by default. We ran experiments on validation set with different inverse of regularization strength $C \in [0,10]$. 
+
+For the Naive Bayes one, we ran experiments on validation set with different assumptions on probability distribution(Gaussian Naive Bayes, Multinomial Naive Bayes and Bernoulli Naive Bayes).
+
+The BERT model is much more complicated than others, we only ran experiments on validation set with different learning rate ($ 5e^{-5}, 3e^{-5}, 2e^{-5}$) of Adam Optimizer as the BERT authors' recommendations for fine-tuning.
+\section{Results and Conclusions}
+% include your own bib file like this:
+\bibliographystyle{acl}
+%\bibliography{acl2015}
+\bibliography{ref}
+
+\end{document}
